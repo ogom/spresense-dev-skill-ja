@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spresense 開発"
+  short_description: "Spresense の環境準備からビルド・アプリを書き込んで動作確認する"
+  default_prompt: "$spresense-dev を使って、Spresenseアプリを準備・ビルド・書き込みしてください。"
