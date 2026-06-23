@@ -3,44 +3,31 @@
 Spresense の開発を Codex から進めるための skill です。
 環境確認、SDK 取得、ボード接続、ブートローダー書き込み、アプリ作成、ビルド、書き込み、シリアルでの動作確認までを扱います。
 
-## 内容
-
-- `.codex/skills/spresense-dev/SKILL.md`: Spresense 開発手順と注意点
-- `.codex/skills/spresense-dev/agents/openai.yaml`: Codex 上の表示名と初期プロンプト
-
 ## インストール
 
-このリポジトリの `.codex` ディレクトリを Codex の設定ディレクトリへ配置します。
+リポジトリをクローンします。
 
 ```sh
-cp -R .codex ~/.codex
+git clone https://github.com/ogom/spresense-dev-skill-ja.git
 ```
 
-既存の `~/.codex` がある場合は、必要な skill だけをコピーしてください。
-
-```sh
-cp -R .codex/skills/spresense-dev ~/.codex/skills/
-```
+クローンしたフォルダを Codex や VS Code で開きます。
 
 ## 使い方
 
-Codex で次のように依頼します。
+Codex に次のように依頼します。
 
 ```text
-$spresense-dev を使って、myproject に hello サンプルを追加し、ビルドしてください。
+$spresense-dev を使って、myproject に examples/led_blink を作成して LED を光らせてください。
 ```
 
-## LED 点滅の例
-
-```text
-$spresense-dev を使って、myproject に examples/led_blink を作成し、ビルドして実機へ書き込み、LED を点滅させてください。
-```
-
-内部では主に次の処理が行われます。
+主な流れは次の通りです。
 
 ```sh
 source ~/spresenseenv/setup
-source spresense/sdk/tools/build-env.sh
+cd spresense/sdk
+source tools/build-env.sh
+spr-set-approot ../../myproject
 spr-import-example examples/led_blink
 spr-config userapp/led_blink
 spr-make
@@ -48,19 +35,17 @@ spr-flash
 spr-terminal
 ```
 
-NSH で `led_blink` を実行すると、4 個の LED が 100ms 間隔で順番に点滅します。
-シリアルターミナルを `Ctrl-]` で閉じても、ボードをリセットまたは電源を切るまで処理は継続します。
+スキル本体は `.codex/skills/spresense-dev/` にあります。
+詳細なコマンドは `references/command.md`、サンプル手順は `references/examples.md` を参照してください。
 
-同じファームウェアをもう一度動かす場合は、短い依頼で済みます。
+## Spresense CLI
 
-```text
-$spresense-dev を使って、LED をもう一度光らせてください。
+任意のターミナルで動作を確認する流れは次の通りです。
+
+```sh
+source ~/spresenseenv/setup
+source spresense/sdk/tools/build-env.sh
+spr-make && spr-flash && spr-terminal
 ```
 
-## 注意
-
-spresense は bash のスクリプトなので、zsh でも動作するように調整します。
-
-```text
-build-env.sh を zsh でも .spresense_env を読み込めるように変更してください。
-```
+シリアルターミナルは `Ctrl-]` で閉じます。
