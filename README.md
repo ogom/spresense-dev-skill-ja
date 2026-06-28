@@ -35,6 +35,12 @@ spr-flash
 spr-terminal
 ```
 
+echo でコマンドを送る例
+
+```sh
+echo -e "led_blink" > /dev/cu.SLAB_USBtoUART
+```
+
 スキル本体は `.codex/skills/spresense-dev/` にあります。
 詳細なコマンドは `references/command.md`、サンプル手順は `references/examples.md` を参照してください。
 

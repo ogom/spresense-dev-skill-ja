@@ -95,10 +95,10 @@ spr-make
 生成されたアプリディレクトリで確認するファイル:
 
 - `sensor_log_main.c`: エントリポイント。
-- `Makefile`: `PROGNAME`、`PRIORITY`、`STACKSIZE`、`MAINSRC`。
-- `Make.defs`: `CONFIG_USERAPP_SENSOR_LOG` のとき `CONFIGURED_APPS` に追加される。
-- `Kconfig`: `USERAPP_SENSOR_LOG` と関連設定。
+- `Makefile`、`Make.defs`、`Kconfig`、`configs/userapp/sensor_log/defconfig`。
 - `CMakeLists.txt`: 存在する場合は CMake ビルド対象。
+
+設定ファイルの対応は `references/config.md` の「Kconfig とコマンド名」を参照する。
 
 ## 新規 C++ アプリ
 
@@ -115,7 +115,7 @@ spr-make
 C++ 実装では、生成された `*_main.cxx` の構成に合わせる。
 クラスやヘルパーを追加する場合も、まず `Makefile` と、存在する場合は `CMakeLists.txt` が対象ソースを拾うか確認する。
 macOS 標準 bash で `bad substitution` が出た場合でも、アプリディレクトリだけ作られていることがある。
-`Kconfig`、`Makefile`、`Make.defs`、`configs/userapp/<name>/defconfig` を確認し、`MYPROJECT_` などのアプリルート接頭辞が残っていれば `USERAPP_` に揃える。
+`Kconfig`、`Makefile`、`Make.defs`、`configs/userapp/<name>/defconfig` の確認観点は `references/config.md` を参照する。
 
 ## led_ws2812
 
@@ -133,18 +133,11 @@ spr-flash
 spr-terminal
 ```
 
-`configs/userapp/led_ws2812/defconfig` には、アプリ本体に加えて SPI4 のキャラクタデバイスを使う設定を含める。
+`configs/userapp/led_ws2812/defconfig` には、アプリ本体に加えて SPI4 のキャラクタデバイスを使う設定を含める。設定値は `references/config.md` の「SPI4 キャラクタデバイス」を参照する。
 
 ```text
 +USERAPP_LED_WS2812=y
-+CXD56_SPI4=y
-+CXD56_SPI_DRIVER=y
-+SPI_DRIVER=y
-+SPI_EXCHANGE=y
-+SYSTEM_SPITOOL=y
 ```
-
-`SYSTEM_SPITOOL` は `spi` コマンドだけでなく、Spresense の bringup で `/dev/spi4` を登録する条件にもなる。
 
 アプリ側の最小 API は次の形にする。
 
@@ -176,22 +169,9 @@ nsh> led_ws2812 fill 32 0 0
 nsh> led_ws2812 clear
 ```
 
-## Kconfig とコマンド名の対応
-
-`spr-create-app hello` や `spr-import-example apps/examples/hello` の場合、Kconfig シンボルと実行コマンドはおおむね次の対応になる。
-
-```text
-USERAPP_HELLO=y
-CONFIG_USERAPP_HELLO_PROGNAME="hello"
-nsh> hello
-```
-
-アプリ名を変えたら、`USERAPP_<APPNAME>`、`CONFIG_USERAPP_<APPNAME>_PROGNAME`、`PROGNAME` の対応を確認する。
-
 ## うまく動かないとき
 
 - `spr-info` で `SPRESENSE_HOME` が意図した `myproject` を指しているか確認する。
 - `spr-config userapp/<name>` の `<name>` が `SPRESENSE_HOME/configs/userapp/<name>` と一致するか確認する。
-- `Kconfig` の `default n` を保ち、設定は `spr-config` で有効化する。
-- NSH でコマンドが見つからない場合は、`CONFIG_NSH_BUILTIN_APPS=y` と `CONFIG_USERAPP_<APPNAME>=y` を確認して再ビルドする。
+- Kconfig、defconfig、NSH コマンド名の対応は `references/config.md` を参照する。
 - 実機検証が必要なときは `spr-set-port`、`spr-flash`、`spr-terminal` の順に確認する。

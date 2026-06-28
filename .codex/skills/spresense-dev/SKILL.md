@@ -10,6 +10,7 @@ description: Spresense 開発をターミナルで支援する。Use when creati
 Spresense 開発では、まず作業環境を読み込み、SDK ルートとアプリケーションルートを確認してから変更する。
 
 詳細なコマンドは必要になった時点で `references/command.md` を読む。
+Kconfig、defconfig、SPI、アプリ自動起動などの設定を扱うときは `references/config.md` を読む。
 サンプルの取り込み、`hello`、`led_blink`、新規アプリ、SPI/WS2812 の構成例が必要な時点で `references/examples.md` を読む。
 
 ## 作業フロー
@@ -29,6 +30,7 @@ Spresense 開発では、まず作業環境を読み込み、SDK ルートとア
 - `spr-create-app` で作るアプリ名は英数字と `_` のみにし、数字で始めない。
 - C++ アプリは `spr-create-app <name> "Description" -x` を使う。
 - 新規アプリをビルドしたらログの `Register: <name>`、`CXX: *_main.cxx` または `CC: *_main.c`、`out/*.spk` 生成を確認する。
+- ビルドログはファイルに保存し、`tail` や `rg` で末尾とエラー行だけ確認する。`spr-make` の全ログを会話に流さない。
 - ビルドエラーが出たら、最初に `SPRESENSE_HOME` と `spr-config` の対象、次に Kconfig のシンボル名、最後に include とリンク対象を確認する。
 - `spr-distclean` や `spr-make distclean` は生成物を大きく消す可能性があるので、必要性を説明してから使う。
 

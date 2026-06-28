@@ -114,12 +114,21 @@ spr-config userapp/led_blink
 spr-config userapp/my_app
 ```
 
-`spr-config` は SDK の `tools/config.py` を使って NuttX の `.config` を作る。設定を変更したい場合は `spr-make menuconfig`、保存したい場合は `spr-make savedefconfig` を使う。
+Kconfig、defconfig、SPI4、NSH コマンド名、自動起動 ON/OFF などの設定詳細は `references/config.md` を参照する。
 
 ## ビルド
 
 ```sh
 spr-make
+```
+
+トークン節約のため、ビルドログはファイル保存して末尾だけ見る。
+`spr-make` の全ログを会話に流すより、ログファイルに落として `tail` やエラー行だけ確認する方がかなり軽い。
+
+```sh
+spr-make >/tmp/spr-make.out 2>&1
+tail -n 80 /tmp/spr-make.out
+rg -n "error:|ERROR|Register:|CC:|CXX:|LD:|Generating:|Build successful" /tmp/spr-make.out
 ```
 
 代表的な make ターゲット:
